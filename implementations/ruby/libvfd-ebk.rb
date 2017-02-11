@@ -3,19 +3,19 @@ require 'yaml'
 class EbkVfd
 
 	class UnsupportedCharError<StandardError;end
+	class FancyString<String;end
 
 	private
 
 	def convertStr(s)
-		dict = YAML.load File.read("dict.yaml")
+		s.is_a?(FancyString)&&(return s.gsub("\n","\n\x10\x14"))
+		dict = YAML.load(File.read("dict.yaml"))["charset"]
 		s = s.split("")
 		s.map! do |ch|
-			unless (0..125).to_a.include?(ch.ord)
-				if dict.keys.include?(ch)
-					ch = dict[ch].chr
-				else
-					raise(UnsupportedCharError,"Unsupported char `#{ch}`")
-				end
+			if dict.keys.include?(ch)
+				ch = dict[ch].chr
+			else
+				(0..125).to_a.include?(ch.ord)||raise(UnsupportedCharError,"Unsupported char `#{ch}`")
 			end
 			ch
 		end
@@ -67,12 +67,23 @@ class EbkVfd
 		end
 	end
 
-	def fancy(s)
-		
-	end
-
 	def close
 		@socket.close
 	end
 
+end
+
+def fancy(s)
+	s.is_a?(EbkVfd::FancyString)&&return
+	dict = YAML.load(File.read("dict.yaml"))["fancy"]
+	s = s.split("")
+	s.map! do |ch|
+		if dict.keys.include?(ch)
+			ch = dict[ch].chr
+		else
+			(0..125).to_a.include?(ch.ord)||raise(UnsupportedCharError,"Unsupported char `#{ch}`")
+		end
+		ch
+	end
+	return EbkVfd::FancyString.new(s.join.gsub("\n","\n\x10\x14"))
 end
