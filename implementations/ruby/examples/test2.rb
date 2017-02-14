@@ -1,4 +1,4 @@
-$:.unshift(File.expand_path(".."))
+Dir.chdir("..")
 load 'libvfd-ebk.rb'
 
 vfd = EbkVfd.new("192.168.21.149")
