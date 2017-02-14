@@ -1,7 +1,7 @@
 Dir.chdir("..")
 load 'libvfd-ebk.rb'
 
-x = EbkVfd.new("192.168.21.149")
+x = EbkVfd.new("192.168.21.151")
 x.setCursorChar(0)
 sleep 5
 for ch in "Wake up, Neo...".split("")
