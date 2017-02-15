@@ -24,8 +24,8 @@ class EbkVfd
 
 	public
 
-	def initialize(ip)
-		@socket = TCPSocket.new(ip,23)
+	def initialize(ip,port=23)
+		@socket = TCPSocket.new(ip,port)
 		@cursor = 0
 		clear
 	end
