@@ -11,13 +11,14 @@ class EbkVfd(object):
 	s = None
 	cursor = 0
 	ip = ""
-	def __init__(self,ip):
+	port = 23
+	def __init__(self,ip,port=23):
 		try:
 			self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-			#self.s.settimeout(2)
-			self.s.connect((ip,23))
+			self.s.connect((ip,port))
 			self.s.sendall(b"\x10\x14\n\n")
 			self.ip = ip
+			self.port = port
 		except:
 			raise Exception("Error creating a socket instance bound to " + ip + ":23")
 	
